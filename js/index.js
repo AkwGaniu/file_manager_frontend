@@ -5,7 +5,7 @@ const fileInput = document.getElementById('files')
 
 const localUrl = `http://localhost:3000/`
 const herokuUrl = `https://filesrepo.herokuapp.com/`
-const base_url = herokuUrl
+const base_url = localUrl
 if (fileInput) {
     fileInput.addEventListener('change', handleFileSelect, false);
 
@@ -261,8 +261,10 @@ const userLogin = () => {
         .then(resp => {
             if(resp.ok) {
                 return resp.json()
+            } else if (resp.statusText == "Unauthorized") {
+                    throw new Error("Email does not exist or Password is invalid")
             } else {
-                return Promise.reject("Oops! Something went wrong.")
+                return Promise.reject("Oops! something went wrong")
             }
         })
         .then(data => {
@@ -332,6 +334,7 @@ const registerUser = () => {
             .catch(error => {
                 submit.innerHTML = `Register`
                 submit.style.backgroundColor = "purple"
+                console.log(error)
                 alert(error)
             })
         } else {
