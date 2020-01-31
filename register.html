@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/style.css">
+
+    <title>REGISTER</title>
+</head>
+<body>
+
+    <div class="registration-modal">
+        <div class="modal-content">
+          <!-- <span class="close" >+</span> -->
+          <h2>Register With Us</h2>
+          <form action="#" onsubmit="event.preventDefault()" autocomplete="off">
+              <div class="form-group">
+                <span class="diffe"><i class="fa fa-user"></i></span>       
+                <input type="text" placeholder="Full name*" id="name" required>
+              </div>
+              <p class="error" id="nameError"></p>
+    
+    
+              <div class="form-group">
+                <span class="diffe"><i class="fa fa-envelope"></i></span>       
+                <input type="email" placeholder="Email address*" id="regEmail" required>
+              </div>
+    
+              <div class="form-group">
+                <span class="diffe"><i class="fa fa-unlock"></i></span>       
+                <input type="password" placeholder="Password*" id="regPass" required>
+              </div>
+    
+              <div class="form-group">
+                <span class="diffe"><i class="fa fa-unlock"></i></span>       
+                <input type="password" placeholder="Confirm password*" id="passConfirm" required>
+              </div>
+    
+              <div class="form-group butt">
+                <button class="button" id="reg"  onclick="registerUser()">Register</button>
+              </div>
+    
+          </form>
+          <p>Already have an account <a href="index.html" class="show-login-modal" target="_self" rel="noopener noreferrer">Log in Here</a></p>
+      </div>
+    
+      </div> <!-- END OF REGISTRATION MODAL -->
+    
+    <script src="js/index.js"></script>
+</body>
+</html>

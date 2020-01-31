@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/style.css">
+
+    <title>LOGIN</title>
+</head>
+<body>
+    <div class="login-modal">
+        <div class="modal-content">
+          <div class="image">
+            <img src="images/user.png" alt="">
+          </div>
+
+          <form action="#" onsubmit="event.preventDefault()" autocomplete="off">
+              <div class="form-group" id="email-group">
+                <!-- <img src="images/email1.png" alt="">   -->   
+                <span class="diffe"><i class="fa fa-envelope"></i></span>       
+                <input type="email" placeholder="Email address" id="email" autocomplete="off" required>
+              </div>
+
+              <div class="form-group" id="pass-group">
+                <!-- <img src="images/icons8-privacy-64.png" class = "diff" alt=""> -->
+                 <span class="diffe"><i class="fa fa-unlock"></i></span>       
+                <input type="password" placeholder="Password" id="pass" required>
+              </div>
+    
+    
+              <div class="form-group butt">
+                <button class="button" value = "Log In" id="login" onclick="userLogin()">Log In</button> 
+              </div>
+          </form> 
+          <p>Forgot your password <a href="#" target="_self" rel="noopener noreferrer">Reset</a> | <a href="register.html" class="reg-cta" target="_self" rel="noopener noreferrer">Sign up</a></p>
+        </div>
+      </div> <!-- END OF LOGIN MODAL -->
+      <script src="js/index.js"></script>
+</body>
+</html>

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="bootstrap-4.3.1-dist/css/bootstrap.min.css">
+    <link rel="shortcut icon" href="fontawesome-free-5.12.0-web/css/" type="image/x-icon">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <title>File Manager</title>
+</head>
+<body>
+    <div class="preview-modal">
+        <span class="exit" id="close">+</span>
+
+        <div class="modal-content">
+            <div class="file-holder">
+                <img src="#" id="image-holder" alt="current file">
+            </div>
+        </div>
+    </div>
+    <header>
+        <div class="head-holder">
+            <h1>Ojo HRM File Repository</h1>
+
+            <div class="search">
+                <input type="text" name="" id="search-input" onkeyup="search()" placeholder="Search Link">
+                <button><i class="fa fa-search" onclick="search()"></i></button>
+            </div>
+
+            <div class="user-details">
+                <p>Hi <span id="user">Omolar</span></p>
+                <a class="logout" onclick="logout()"><i class="fa fa-power-off"></i></a>
+            </div>
+        </div>
+    </header>
+    <main>
+        <div class="form">
+            <form  action="#"  onsubmit="event.preventDefault()" method="POST" enctype="multipart/form-data">
+                <input type="file" value="Select File" id="files" name="files[]" multiple />
+
+                <input type="submit" onclick="upload_file()" value="Upload" class="btn btn-primary" id="upload">
+            </form>
+
+            <output id="list"></output>
+            
+            <p>progress bar.....</p>
+        </div>
+
+        <div class="file-table">
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped">
+                    <thead>
+                        <tr>
+                            <th>S/N</th>
+                            <th>File Name</th>
+                            <th>Date Uploaded</th>
+                            <th>File Type</th>
+                            <th>Uploaded By</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="file_holder">
+                        
+                    </tbody>
+                    
+                    <tbody id="search_file_holder">
+                        <h2>File not found</h2>
+                    </tbody>
+                </table>
+            </div>
+
+        </div>
+    </main>
+    <footer>
+        <div>
+            <p>&copy Ojo Lg.</p>
+        </div>
+    </footer>
+    <script src="js/index.js"></script>
+
+    <script>
+        let currentUserName = document.querySelector("#user")
+        let userDetails = JSON.parse(localStorage.getItem('user'))
+        if( userDetails == "empty" ) {
+            self.location = "index.html"
+        } else {
+            currentUserName.innerHTML = userDetails.name
+        }
+        //FETCH FILES
+        fetch_files()
+    </script>
+</body>
+</html>
