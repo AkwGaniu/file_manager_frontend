@@ -3,8 +3,8 @@ const search_container = document.querySelector("#search_file_holder")
 const fileInput = document.getElementById('files')
 
 
-const localUrl = `http://localhost:3000/`
-const herokuUrl = `https://filesrepo.herokuapp.com/`
+const localUrl = `http://localhost:3000`
+const herokuUrl = `https://filesrepo.herokuapp.com`
 const base_url = herokuUrl
 
 if (fileInput) {
@@ -18,7 +18,7 @@ if (fileInput) {
 
 // FETCH URL
 const fetch_files = () => {
-    let url = `http://localhost:3000/file/fetch_files/`
+    let url = `${base_url}/file/fetch_files/`
     const fetchData  = {
         method: 'get'
     }
@@ -72,7 +72,7 @@ const search = () => {
 
     if (search_key != "") {
 
-        let url = `http://localhost:3000/file/search_files/${search_key}`
+        let url = `${base_url}/file/search_files/${search_key}`
         const fetchData  = {
             method: 'get'
         }
@@ -127,7 +127,7 @@ const search = () => {
 //UPLOAD FILE
 function upload_file () {
     let user = JSON.parse(localStorage.getItem("user"))
-    let url = `http://localhost:3000/file/file_upload`
+    let url = `${base_url}/file_upload`
 
     let data = new FormData()
     for (const file of fileInput.files) {
@@ -171,7 +171,7 @@ function delete_file (file_name) {
     const consent = confirm(`Are you sure you want to delete this file?`)
 
     if (consent) {
-    let url = `http://localhost:3000/file/delete_file`
+    let url = `${base_url}/file/delete_file`
     
     const fetchData  = {
         method: 'delete',
@@ -215,7 +215,7 @@ function handleFileSelect(evt) {
 
 //DOWNLOAD FILE
 function download_file (file_name) {
-    window.open(`http://localhost:3000/file/download/${file_name}`)
+    window.open(`${base_url}/file/download/${file_name}`)
 }
 
 //PREVIEW FILE
@@ -223,7 +223,7 @@ function preview_file(file_name) {
     let preview_modal = document.querySelector(".preview-modal")
     let image_holder = document.querySelector("#image-holder")
 
-    let url = `http://localhost:3000/file/preview_file/${file_name}`
+    let url = `${base_url}/file/preview_file/${file_name}`
     
     const fetchData  = {
         method: 'get',
@@ -257,7 +257,7 @@ const userLogin = () => {
         login.innerHTML = `<img src="images/processing.gif" alt="" >`
         login.style.backgroundColor = "grey"
 
-        let url = `${base_url}user/login`
+        let url = `${base_url}/user/login`
         let data = {
             email: email,
             password: password
@@ -311,7 +311,7 @@ const registerUser = () => {
             submit.innerHTML = `<img src="images/processing.gif" alt="" >`
             submit.style.backgroundColor = "grey"
 
-            let url = `${base_url}user/register`
+            let url = `${base_url}/user/register`
 
             let data = {
                 fname: fname,
