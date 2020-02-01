@@ -5,10 +5,10 @@ const fileInput = document.getElementById('files')
 
 const localUrl = `http://localhost:3000/`
 const herokuUrl = `https://filesrepo.herokuapp.com/`
-const base_url = herokuUrl
+const base_url = localUrl
+
 if (fileInput) {
     fileInput.addEventListener('change', handleFileSelect, false);
-
 }
 
 // document.addEventListener('DOMContentLoaded', () => {
@@ -18,11 +18,11 @@ if (fileInput) {
 
 // FETCH URL
 const fetch_files = () => {
-   let user = JSON.parse(localStorage.getItem("user"))
-    let url = `http://localhost:3000/file/fetch_files/${user.userId}`
+    let url = `http://localhost:3000/file/fetch_files/`
     const fetchData  = {
         method: 'get'
     }
+
     fetch(url, fetchData)
         .then(resp => {
             if(resp.ok) {
@@ -34,7 +34,7 @@ const fetch_files = () => {
         .then(data => {
             container.innerHTML = ""
             let sn = 1
-            for (file of data.file) {
+            for (file of data) {
                 let time = file.time_created.slice(0, 5)
                 let tr = document.createElement("tr")
                 tr.innerHTML =  `
@@ -42,11 +42,11 @@ const fetch_files = () => {
                 <td>${file.file_name}</td>
                 <td>${file.date_created +" "+ time}</td>
                 <td>${file.file_type}</td>
-                <td>${data.user.name}</td>
+                <td>${file.user.lname + " " + file.user.fname}</td>
                 <td> 
-                    <button onclick="preview_file('${file.file_name}')" class="btn btn-success"><i class="fa fa-eye"></i></button>
-                    <button onclick="delete_file('${file.file_name}')" class="btn btn-danger"><i class="fa fa-trash"></i></button>
-                    <button onclick="download_file('${file.file_name}')" class="btn btn-dark"><i class="fa fa-download"></i></button>
+                    <button onclick="preview_file('${file.file_name}')" class="oje btn btn-success"><i class="fa fa-eye"></i></button>
+                    <button onclick="delete_file('${file.file_name}')" class="oje btn btn-danger"><i class="fa fa-trash"></i></button>
+                    <button onclick="download_file('${file.file_name}')" class="oje btn btn-dark"><i class="fa fa-download"></i></button>
                 </td>`
                 container.append(tr)
 
@@ -61,10 +61,18 @@ const fetch_files = () => {
 // SEARCH URL
 const search = () => {
     user = JSON.parse(localStorage.getItem("user"))
-    let search_key = document.querySelector("#search-input").value
+    let mobile = document.querySelector("#search-input-mobile").value
+    let desktop = document.querySelector("#search-input").value
+    let search_key
+    if (document.documentElement.clientWidth > 750) {
+        search_key = desktop
+    } else {
+        search_key = mobile
+    }
+
     if (search_key != "") {
 
-        let url = `http://localhost:3000/file/search_files/${search_key}/${user.userId}`
+        let url = `http://localhost:3000/file/search_files/${search_key}`
         const fetchData  = {
             method: 'get'
         }
@@ -77,11 +85,15 @@ const search = () => {
                 }
             })
             .then(data => {
-                if(data.file.lenght >= 1) {
-                    container.classList.toggle("hide")
-                    console.log(data)
+                console.log(data)
+                if(data.length >= 1) {
+                    document.querySelector(".not-found").style.display = "none"
+                    search_container.innerHTML = ""
+                    container.innerHTML = ""
+                    // container.classList.toggle("hide")
+                    // search_container.classList.toggle("show")
                     let sn = 1
-                    for (file of data.file) {
+                    for (file of data) {
                        let time = file.time_created.slice(0, 5)
                        let tr = document.createElement("tr")
                        tr.innerHTML =  `
@@ -89,19 +101,20 @@ const search = () => {
                        <td>${file.file_name}</td>
                        <td>${file.date_created +" "+ time}</td>
                        <td>${file.file_type}</td>
-                       <td>${data.user.name}</td>
+                       <td>${file.user.lname + " " + file.user.fname}</td>
                        <td> 
                            <button onclick="preview_file('${file.file_name}')" class="btn btn-success"><i class="fa fa-eye"></i></button>
                            <button onclick="delete_file('${file.file_name}')" class="btn btn-danger"><i class="fa fa-trash"></i></button>
                            <button onclick="download_file('${file.file_name}')" class="btn btn-dark"><i class="fa fa-download"></i></button>
                        </td>`
        
-                       container.append(tr)
+                       search_container.append(tr)
                    }
                } else {
-                    // search_container.classList.toggle("hide")
-                    container.classList.toggle("hide")
-                    // fetch_files()
+                search_container.innerHTML = ""
+                // container.classList.toggle("hide")
+                    fetch_files()
+                    document.querySelector(".not-found").style.display = "block"
                }
             })
             .catch(error => {
@@ -114,14 +127,13 @@ const search = () => {
 //UPLOAD FILE
 function upload_file () {
     let user = JSON.parse(localStorage.getItem("user"))
-    // let file = fileInput.files
     let url = `http://localhost:3000/file/file_upload`
 
-    var data = new FormData()
+    let data = new FormData()
     for (const file of fileInput.files) {
         data.append('files',file,file.name)
       }
-    data.append('user', user.userId)
+    data.append('user', user._id)
 
     // // Check for the various File API support.
     // if (window.File && window.FileReader && window.FileList && window.Blob) {
@@ -286,14 +298,15 @@ const userLogin = () => {
 
 //REGISTER USER
 const registerUser = () => {
-    let name = document.querySelector("#name").value
+    let fname = document.querySelector("#fname").value
+    let lname = document.querySelector("#lname").value
     let email = document.querySelector("#regEmail").value
     let password = document.querySelector("#regPass").value
     let passConfirm = document.querySelector("#passConfirm").value
     let submit = document.querySelector("#reg")
 
-    if(!(email === "" || password === "" || name === "")) {
-        console.log({"pass": password, "confirm": passConfirm})
+    if(!(email === "" || password === "" || lname === "" || fname === "")) {
+
         if (password === passConfirm) {
             submit.innerHTML = `<img src="images/processing.gif" alt="" >`
             submit.style.backgroundColor = "grey"
@@ -301,7 +314,8 @@ const registerUser = () => {
             let url = `${base_url}user/register`
 
             let data = {
-                name: name,
+                fname: fname,
+                lname: lname,
                 email: email,
                 password: password
             }
@@ -324,11 +338,12 @@ const registerUser = () => {
                     submit.innerHTML = `Register`
                     submit.style.backgroundColor = "purple"
                     alert("Registration Successful, proceed to login")
-                    self.location = "login.html"
+                    self.location = "index.html"
                 } else {
                     submit.innerHTML = `Register`
                     submit.style.backgroundColor = "purple"
                     alert(data)
+                    self.location = "index.html"
                 }
             })
             .catch(error => {

@@ -23,7 +23,7 @@
     </div>
     <header>
         <div class="head-holder">
-            <h1>Ojo HRM File Repository</h1>
+            <a href="home.html">File Archive</a>
 
             <div class="search">
                 <input type="text" name="" id="search-input" onkeyup="search()" placeholder="Search Link">
@@ -31,25 +31,32 @@
             </div>
 
             <div class="user-details">
-                <p>Hi <span id="user">Omolar</span></p>
+                <p>Hi <span id="user"></span></p>
                 <a class="logout" onclick="logout()"><i class="fa fa-power-off"></i></a>
             </div>
         </div>
+        <div class="mobile-search-holder">
+            <div class="mobile-search">
+                <input type="text" name="" id="search-input-mobile" onkeyup="search()" placeholder="Search Link">
+                <button><i class="fa fa-search" onclick="search()"></i></button>
+            </div>
+        </div>
+        
     </header>
     <main>
         <div class="form">
             <form  action="#"  onsubmit="event.preventDefault()" method="POST" enctype="multipart/form-data">
-                <input type="file" value="Select File" id="files" name="files[]" multiple />
+                <input type="file" id="files" name="files[]" multiple />
 
                 <input type="submit" onclick="upload_file()" value="Upload" class="btn btn-primary" id="upload">
             </form>
 
             <output id="list"></output>
-            
-            <p>progress bar.....</p>
         </div>
 
         <div class="file-table">
+            <h2 class="not-found">File not found</h2>
+
             <div class="table-responsive">
                 <table class="table table-bordered table-striped">
                     <thead>
@@ -63,11 +70,9 @@
                         </tr>
                     </thead>
                     <tbody id="file_holder">
-                        
                     </tbody>
                     
                     <tbody id="search_file_holder">
-                        <h2>File not found</h2>
                     </tbody>
                 </table>
             </div>
@@ -87,7 +92,7 @@
         if( userDetails == "empty" ) {
             self.location = "index.html"
         } else {
-            currentUserName.innerHTML = userDetails.name
+            currentUserName.innerHTML = userDetails.lname
         }
         //FETCH FILES
         fetch_files()
