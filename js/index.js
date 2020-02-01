@@ -127,7 +127,7 @@ const search = () => {
 //UPLOAD FILE
 function upload_file () {
     let user = JSON.parse(localStorage.getItem("user"))
-    let url = `${base_url}/file_upload`
+    let url = `${base_url}/file/file_upload`
 
     let data = new FormData()
     for (const file of fileInput.files) {
