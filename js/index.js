@@ -5,7 +5,7 @@ const fileInput = document.getElementById('files')
 
 const localUrl = `http://localhost:3000`
 const herokuUrl = `https://filesrepo.herokuapp.com`
-const base_url = herokuUrl
+const base_url = localUrl
 
 if (fileInput) {
     fileInput.addEventListener('change', handleFileSelect, false);
@@ -44,12 +44,11 @@ const fetch_files = () => {
                 <td>${file.file_type}</td>
                 <td>${file.user.lname + " " + file.user.fname}</td>
                 <td> 
-                    <button onclick="preview_file('${file.file_name}')" class="oje btn btn-success"><i class="fa fa-eye"></i></button>
-                    <button onclick="delete_file('${file.file_name}')" class="oje btn btn-danger"><i class="fa fa-trash"></i></button>
-                    <button onclick="download_file('${file.file_name}')" class="oje btn btn-dark"><i class="fa fa-download"></i></button>
+                    <button onclick="preview_file('${file.file_name}')" title='Preview File' data-toggle='tooltip' data-placement='top' class="oje btn btn-success"><i class="fa fa-eye"></i></button>
+                    <button onclick="delete_file('${file.file_name}')" title='Delete File' data-toggle='tooltip' data-placement='top' class="oje btn btn-danger"><i class="fa fa-trash"></i></button>
+                    <button onclick="download_file('${file.file_name}')" title='Downoad File' data-toggle='tooltip' data-placement='top' class="oje btn btn-dark"><i class="fa fa-download"></i></button>
                 </td>`
                 container.append(tr)
-
             }
         })
         .catch(error => {
@@ -90,8 +89,7 @@ const search = () => {
                     document.querySelector(".not-found").style.display = "none"
                     search_container.innerHTML = ""
                     container.innerHTML = ""
-                    // container.classList.toggle("hide")
-                    // search_container.classList.toggle("show")
+                   
                     let sn = 1
                     for (file of data) {
                        let time = file.time_created.slice(0, 5)
@@ -112,7 +110,6 @@ const search = () => {
                    }
                } else {
                 search_container.innerHTML = ""
-                // container.classList.toggle("hide")
                     fetch_files()
                     document.querySelector(".not-found").style.display = "block"
                }
@@ -145,7 +142,6 @@ function upload_file () {
     const fetchData  = {
         method: 'post',
         body:  data
-
     }
 
     fetch(url, fetchData)
@@ -158,7 +154,7 @@ function upload_file () {
         })
         .then(data => {
             alert(data)
-            location.reload()            
+            fetch_files()
         })
         .catch(error => {
             console.log(error)
@@ -188,8 +184,7 @@ function delete_file (file_name) {
         })
         .then(data => {
             alert(data)
-            location.reload()            
-            console.log(data)        
+            fetch_files()
         })
         .catch(error => {
             console.log(error)
