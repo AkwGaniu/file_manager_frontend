@@ -3,7 +3,7 @@ const search_container = document.querySelector("#search_file_holder")
 const fileInput = document.getElementById('files')
 
 
-const localUrl = `http://localhost:3000`
+const localUrl = `http://localhost:5000`
 const herokuUrl = `https://filesrepo.herokuapp.com`
 const base_url = localUrl
 
@@ -32,9 +32,17 @@ const fetch_files = () => {
             }
         })
         .then(data => {
+            upload_btn = document.querySelector("#upload")
+            upload_btn.value = "Upload"
             container.innerHTML = ""
             let sn = 1
             for (file of data) {
+
+                let begin = file.file_path.indexOf("/upload")
+                let url1 = file.file_path.slice(0, begin)
+                let url2 = file.file_path.slice(begin + 7, file.file_path.length)
+                let download_url = `${url1}/upload/fl_attachment${url2}`
+                
                 let time = file.time_created.slice(0, 5)
                 let tr = document.createElement("tr")
                 tr.innerHTML =  `
@@ -44,11 +52,13 @@ const fetch_files = () => {
                 <td>${file.file_type}</td>
                 <td>${file.user.lname + " " + file.user.fname}</td>
                 <td> 
-                    <button onclick="preview_file('${file.file_name}')" title='Preview File' data-toggle='tooltip' data-placement='top' class="oje btn btn-success"><i class="fa fa-eye"></i></button>
-                    <button onclick="delete_file('${file.file_name}')" title='Delete File' data-toggle='tooltip' data-placement='top' class="oje btn btn-danger"><i class="fa fa-trash"></i></button>
-                    <button onclick="download_file('${file.file_name}')" title='Downoad File' data-toggle='tooltip' data-placement='top' class="oje btn btn-dark"><i class="fa fa-download"></i></button>
+                    <a href="${file.file_path}" target="_black" title='Preview File' data-toggle='tooltip' data-placement='top' class="oje btn btn-success"><i class="fa fa-eye"></i></a>
+                    <button onclick="delete_file('${file.file_real_name}')" title='Delete File' data-toggle='tooltip' data-placement='top' class="oje btn btn-danger"><i class="fa fa-trash"></i></button>
+                    <a href="${download_url}" target="_black" title='Downoad File' data-toggle='tooltip' data-placement='top' class="oje btn btn-dark" download><i class="fa fa-download"></i></a>
                 </td>`
                 container.append(tr)
+
+
             }
         })
         .catch(error => {
@@ -123,21 +133,16 @@ const search = () => {
 
 //UPLOAD FILE
 function upload_file () {
+    const upload_btn = document.querySelector("#upload")
+    upload_btn.value = "Processing..."
     let user = JSON.parse(localStorage.getItem("user"))
     let url = `${base_url}/file/file_upload`
 
     let data = new FormData()
     for (const file of fileInput.files) {
-        data.append('files',file,file.name)
+        data.append('file', file, file.name)
       }
     data.append('user', user._id)
-
-    // // Check for the various File API support.
-    // if (window.File && window.FileReader && window.FileList && window.Blob) {
-    // alert("Great success! All the File APIs are supported.")  
-    // } else {
-    // alert('The File APIs are not fully supported in this browser.');
-    // }
 
     const fetchData  = {
         method: 'post',
@@ -154,7 +159,12 @@ function upload_file () {
         })
         .then(data => {
             alert(data)
-            fetch_files()
+            document.getElementById('list').innerHTML = ""
+           if (data = "Upload successful") {
+                fetch_files()
+            } else {
+                upload_btn.value = "Upload"
+            }
         })
         .catch(error => {
             console.log(error)
@@ -206,40 +216,6 @@ function handleFileSelect(evt) {
       output.push('<li> <strong>', escape(f.name), '</strong>', '</li>');
     }
     document.getElementById('list').innerHTML = '<ul>' + output.join('') + '</ul>';
-}
-
-//DOWNLOAD FILE
-function download_file (file_name) {
-    window.open(`${base_url}/file/download/${file_name}`)
-}
-
-//PREVIEW FILE
-function preview_file(file_name) {
-    let preview_modal = document.querySelector(".preview-modal")
-    let image_holder = document.querySelector("#image-holder")
-
-    let url = `${base_url}/file/preview_file/${file_name}`
-    
-    const fetchData  = {
-        method: 'get',
-    }
-
-    fetch(url, fetchData)
-        .then(resp => {
-            if(resp.ok) {
-                return resp.json()
-            } else {
-                return Promise.reject("Oops!!! Something went wrong.")
-            }
-        })
-        .then(data => {
-            console.log(data)
-            preview_modal.classList.toggle("open")
-            image_holder.setAttribute("src", data.path)
-        })
-        .catch(error => {
-            console.log(error)
-        })
 }
 
 //USER LOGIN
