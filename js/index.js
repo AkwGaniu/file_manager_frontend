@@ -5,7 +5,7 @@ const fileInput = document.getElementById('files')
 
 const localUrl = `http://localhost:5000`
 const herokuUrl = `https://filesrepo.herokuapp.com`
-const base_url = localUrl
+const base_url = herokuUrl
 
 if (fileInput) {
     fileInput.addEventListener('change', handleFileSelect, false);
@@ -160,6 +160,7 @@ function upload_file () {
         .then(data => {
             alert(data)
             document.getElementById('list').innerHTML = ""
+            fileInput.value = ""
            if (data = "Upload successful") {
                 fetch_files()
             } else {
