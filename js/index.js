@@ -5,7 +5,7 @@ const fileInput = document.getElementById('files')
 
 const localUrl = `http://localhost:5000`
 const herokuUrl = `https://filesrepo.herokuapp.com`
-const base_url = herokuUrl
+const base_url = localUrl
 
 if (fileInput) {
     fileInput.addEventListener('change', handleFileSelect, false);
