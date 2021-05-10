@@ -142,8 +142,8 @@ function upload_file () {
     for (const file of fileInput.files) {
         data.append('file', file, file.name)
       }
+      console.log(data.get('file'))
     data.append('user', user._id)
-
     const fetchData  = {
         method: 'post',
         body:  data
@@ -158,7 +158,6 @@ function upload_file () {
             }
         })
         .then(data => {
-            alert(data)
             document.getElementById('list').innerHTML = ""
             fileInput.value = ""
            if (data = "Upload successful") {
